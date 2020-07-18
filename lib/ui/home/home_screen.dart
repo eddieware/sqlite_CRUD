@@ -18,13 +18,14 @@ class _HomeScreenState extends State<HomeScreen> {
   DB _database;
 
   @override
-  Future<void> initState() async {
+  Future<void> initState() {
+    super.initState();
     _database = DB();
     materias = DB.query('db_school');
     //
 
     ///
-    super.initState();
+
     //apiService = ApiService();
   }
 

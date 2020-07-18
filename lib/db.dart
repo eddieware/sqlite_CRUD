@@ -3,18 +3,16 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'models/materia.dart';
-import 'models/materia.dart';
-import 'models/materia.dart';
-import 'models/materia.dart';
 
 class DB {
   static Database _db;
 
   static int get _version => 1;
 
-  static Future<void> init() async {
+  // ignore: missing_return
+  static Future<Database> init() async {
     if (_db != null) {
-      return;
+      return _db;
     }
 
     try {
