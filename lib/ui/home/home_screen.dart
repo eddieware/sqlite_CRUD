@@ -1,4 +1,5 @@
 import 'package:consumir_web_api/api/apiservice.dart';
+import 'package:consumir_web_api/db.dart';
 import 'package:consumir_web_api/models/materia.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +14,18 @@ class _HomeScreenState extends State<HomeScreen> {
   BuildContext context;
   ApiService apiService;
 
+  Future<List<Materia>> materias;
+  DB _database;
+
   @override
-  void initState() {
+  Future<void> initState() async {
+    _database = DB();
+    materias = DB.query('db_school');
+    //
+
+    ///
     super.initState();
-    apiService = ApiService();
+    //apiService = ApiService();
   }
 
   @override
@@ -24,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     this.context = context;
     return SafeArea(
       child: FutureBuilder(
-        future: apiService.getProfiles(),
+        future: materias,
         builder: (BuildContext context, AsyncSnapshot<List<Materia>> snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -82,10 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: Text("Yes"),
                                         onPressed: () {
                                           Navigator.pop(context);
-                                          apiService
-                                              .deleteProfile(profile.id)
+                                          DB
+                                              .insert('db_school', profile)
                                               .then((isSuccess) {
-                                            if (isSuccess) {
+                                            if (isSuccess > 0) {
                                               setState(() {});
                                               Scaffold.of(this.context)
                                                   .showSnackBar(SnackBar(

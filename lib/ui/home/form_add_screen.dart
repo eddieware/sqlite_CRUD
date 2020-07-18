@@ -1,4 +1,5 @@
 import 'package:consumir_web_api/api/apiservice.dart';
+import 'package:consumir_web_api/db.dart';
 import 'package:consumir_web_api/models/materia.dart';
 import 'package:flutter/material.dart';
 
@@ -103,21 +104,21 @@ class _FormAddScreenState extends State<FormAddScreen> {
                           cuatrimestre: cuatrimestre,
                           horario: horario);
                       if (widget.profile == null) {
-                        _apiService.createProfile(profile).then((isSuccess) {
+                        DB.insert('db_school', profile).then((isSuccess) {
                           setState(() => _isLoading = false);
-                          if (isSuccess) {
+                          if (isSuccess > 0) {
                             Navigator.pop(_scaffoldState.currentState.context);
                           } else {
                             _scaffoldState.currentState.showSnackBar(SnackBar(
-                              content: Text("Submit data failed"),
+                              content: Text("Insert data failed"),
                             ));
                           }
                         });
                       } else {
                         profile.id = widget.profile.id;
-                        _apiService.updateProfile(profile).then((isSuccess) {
+                        DB.update('db_school', profile).then((isSuccess) {
                           setState(() => _isLoading = false);
-                          if (isSuccess) {
+                          if (isSuccess > 0) {
                             Navigator.pop(_scaffoldState.currentState.context);
                           } else {
                             _scaffoldState.currentState.showSnackBar(SnackBar(

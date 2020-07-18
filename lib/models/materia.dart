@@ -11,7 +11,7 @@ class Materia {
 
   Materia(
       {this.id, this.nombre, this.profesor, this.cuatrimestre, this.horario});
-  factory Materia.fromJoson(Map<String, dynamic> map) {
+  factory Materia.fromJson(Map<String, dynamic> map) {
     return Materia(
         id: map['Id'],
         nombre: map['Nombre'],
@@ -38,7 +38,7 @@ class Materia {
 
 List<Materia> profileFromJson(String jsonData) {
   final data = json.decode(jsonData);
-  return List<Materia>.from(data.map((item) => Materia.fromJoson(item)));
+  return List<Materia>.from(data.map((item) => Materia.fromJson(item)));
 }
 
 String profileToJson(Materia data) {
