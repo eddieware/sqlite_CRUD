@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'form_add_screen.dart';
 import 'home_screen.dart';
 
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
         key: _scaffoldState,
         appBar: AppBar(
           title: Text(
-            'Flutter CRUD API',
+            'Flutter CRUD SQLITE',
             style: TextStyle(color: Colors.white),
           ),
           actions: <Widget>[

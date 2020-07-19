@@ -15,7 +15,7 @@ class FormAddScreen extends StatefulWidget {
 
 class _FormAddScreenState extends State<FormAddScreen> {
   bool _isLoading = false;
-
+  DB _database2;
   //ApiService _apiService = ApiService();
   bool _isFieldNameValid;
   bool _isFieldProfesor;
@@ -36,7 +36,7 @@ class _FormAddScreenState extends State<FormAddScreen> {
       _isFieldProfesor = true;
       _controllerProfesor.text = widget.profile.profesor;
       _isFieldCuatrimestreValid = true;
-      _controllerCuatrimestre.text = widget.profile.cuatrimestre;
+      _controllerCuatrimestre.text = widget.profile.cuatrimestre.toString();
       _isFieldHorarioValid = true;
       _controllerHorario.text = widget.profile.horario;
     }
@@ -108,7 +108,7 @@ class _FormAddScreenState extends State<FormAddScreen> {
                       Materia profile = Materia(
                           nombre: name,
                           profesor: profesor,
-                          cuatrimestre: cuatrimestre,
+                          cuatrimestre: cuatrimestre.toString(),
                           horario: horario);
                       if (widget.profile == null) {
                         DB.insert(Materia.table, profile).then((isSuccess) {
@@ -203,7 +203,7 @@ class _FormAddScreenState extends State<FormAddScreen> {
   Widget _buildTextFieldCuatrimestre() {
     return TextField(
       controller: _controllerCuatrimestre,
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "Cuatrimestre",
         errorText:

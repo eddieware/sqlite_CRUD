@@ -33,20 +33,11 @@ abstract class DB {
   static Future<int> update(String table, Model model) async => await _db
       .update(table, model.toMap(), where: 'id = ?', whereArgs: [model.id]);
 
-  //  static Future<int> delete(String table, Model model) async =>
-  //      await _db.delete(table, where: 'id = ?', whereArgs: [model.id]);
-
   static Future<int> delete(String table, Model model) async {
     final response =
         await _db.delete(table, where: 'id = ?', whereArgs: [model.id]);
 
     return response;
-    // if(response == 1){
-    //   return 1;
-    // }
-    // else{
-    //   return 0;
-    // }
   }
 
   static Future<List<Materia>> getMaterias() async {

@@ -16,31 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Future<void> initState() {
-    create();
-
     super.initState();
-    //
-
-    ///
-
-    //apiService = ApiService();
-  }
-
-  void create() {
-    Materia materia = Materia(
-        nombre: 'Dummy_Name',
-        profesor: 'Dummy_Prof',
-        cuatrimestre: 'Dummy_Cuatri',
-        horario: 'Dummy_Schedjule');
-
-    DB.insert('materiadb', materia);
-    refresh();
-  }
-
-  void refresh() async {
-    List<Map<String, dynamic>> _results = await DB.query(Materia.table);
-    _materias = _results.map((item) => Materia.fromMap(item)).toList();
-    setState(() {});
   }
 
   @override
@@ -87,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     Text(profile.profesor),
-                    Text(profile.cuatrimestre),
+                    Text(profile.cuatrimestre.toString()),
                     Text(profile.horario),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
