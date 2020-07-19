@@ -1,8 +1,6 @@
-import 'package:consumir_web_api/api/apiservice.dart';
-import 'package:consumir_web_api/db.dart';
+import 'package:consumir_web_api/models/db.dart';
 import 'package:consumir_web_api/models/materia.dart';
 import 'package:flutter/material.dart';
-
 import 'form_add_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,16 +10,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   BuildContext context;
-  ApiService apiService;
+  //ApiService apiService;
 
-  Future<List<Materia>> materias;
-  DB _database;
+  List<Materia> _materias = [];
 
   @override
   Future<void> initState() {
+    create();
+
     super.initState();
-    _database = DB();
-    materias = DB.query('db_school');
     //
 
     ///
@@ -29,12 +26,29 @@ class _HomeScreenState extends State<HomeScreen> {
     //apiService = ApiService();
   }
 
+  void create() {
+    Materia materia = Materia(
+        nombre: 'Dummy_Name',
+        profesor: 'Dummy_Prof',
+        cuatrimestre: 'Dummy_Cuatri',
+        horario: 'Dummy_Schedjule');
+
+    DB.insert('materiadb', materia);
+    refresh();
+  }
+
+  void refresh() async {
+    List<Map<String, dynamic>> _results = await DB.query(Materia.table);
+    _materias = _results.map((item) => Materia.fromMap(item)).toList();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     this.context = context;
     return SafeArea(
       child: FutureBuilder(
-        future: materias,
+        future: DB.getMaterias(),
         builder: (BuildContext context, AsyncSnapshot<List<Materia>> snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -73,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     Text(profile.profesor),
-                    Text(profile.cuatrimestre.toString()),
+                    Text(profile.cuatrimestre),
                     Text(profile.horario),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -93,9 +107,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         onPressed: () {
                                           Navigator.pop(context);
                                           DB
-                                              .insert('db_school', profile)
-                                              .then((isSuccess) {
-                                            if (isSuccess > 0) {
+                                              .delete(Materia.table, profile)
+                                              .then((isSucces) {
+                                            if (isSucces == 1) {
                                               setState(() {});
                                               Scaffold.of(this.context)
                                                   .showSnackBar(SnackBar(

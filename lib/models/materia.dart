@@ -1,47 +1,44 @@
-import 'dart:convert';
+import 'package:consumir_web_api/models/base.dart';
 
-import 'package:flutter/semantics.dart';
+class Materia extends Model {
+  static String table = 'materiadb';
 
-class Materia {
   int id;
   String nombre;
   String profesor;
   String cuatrimestre;
   String horario;
+  bool complete;
 
-  Materia(
-      {this.id, this.nombre, this.profesor, this.cuatrimestre, this.horario});
-  factory Materia.fromJson(Map<String, dynamic> map) {
-    return Materia(
-        id: map['Id'],
-        nombre: map['Nombre'],
-        profesor: map['Profesor'],
-        cuatrimestre: map['Cuatrimestre'],
-        horario: map['Horario']);
-  }
+  Materia({
+    this.id,
+    this.nombre,
+    this.profesor,
+    this.cuatrimestre,
+    this.horario,
+  });
 
-  Map<String, dynamic> toJson() {
-    return {
-      "Id": id,
-      "Nombre": nombre,
-      "Profesor": profesor,
-      "Cuatrimestre": cuatrimestre,
-      "Horario": horario
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
+      "nombre": nombre,
+      "profesor": profesor,
+      "cuatrimestre": cuatrimestre,
+      "horario": horario,
     };
+
+    if (id != null) {
+      map['id'] = id;
+    }
+    return map;
   }
 
-  @override
-  String toString() {
-    return 'Profile {Id: $id, Nombre: $nombre, Profesor:$profesor, Cuatrimestre:$cuatrimestre, Horario:$horario}';
+  static Materia fromMap(Map<String, dynamic> map) {
+    return Materia(
+      id: map['id'],
+      nombre: map['nombre'],
+      profesor: map['profesor'],
+      cuatrimestre: map['cuatrimestre'],
+      horario: map['horario'],
+    );
   }
-}
-
-List<Materia> profileFromJson(String jsonData) {
-  final data = json.decode(jsonData);
-  return List<Materia>.from(data.map((item) => Materia.fromJson(item)));
-}
-
-String profileToJson(Materia data) {
-  final jsonData = data.toJson();
-  return json.encode(jsonData);
 }

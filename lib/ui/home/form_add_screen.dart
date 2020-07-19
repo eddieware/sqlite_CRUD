@@ -1,5 +1,4 @@
-import 'package:consumir_web_api/api/apiservice.dart';
-import 'package:consumir_web_api/db.dart';
+import 'package:consumir_web_api/models/db.dart';
 import 'package:consumir_web_api/models/materia.dart';
 import 'package:flutter/material.dart';
 
@@ -16,11 +15,13 @@ class FormAddScreen extends StatefulWidget {
 
 class _FormAddScreenState extends State<FormAddScreen> {
   bool _isLoading = false;
-  ApiService _apiService = ApiService();
+
+  //ApiService _apiService = ApiService();
   bool _isFieldNameValid;
   bool _isFieldProfesor;
   bool _isFieldCuatrimestreValid;
   bool _isFieldHorarioValid;
+  List<Materia> _materias = [];
 
   TextEditingController _controllerName = TextEditingController();
   TextEditingController _controllerProfesor = TextEditingController();
@@ -39,7 +40,14 @@ class _FormAddScreenState extends State<FormAddScreen> {
       _isFieldHorarioValid = true;
       _controllerHorario.text = widget.profile.horario;
     }
+    refresh();
     super.initState();
+  }
+
+  void refresh() async {
+    List<Map<String, dynamic>> _results = await DB.query(Materia.table);
+    _materias = _results.map((item) => Materia.fromMap(item)).toList();
+    setState(() {});
   }
 
   @override
@@ -98,14 +106,13 @@ class _FormAddScreenState extends State<FormAddScreen> {
                       String horario = _controllerHorario.text.toString();
 
                       Materia profile = Materia(
-                          id: 1,
                           nombre: name,
                           profesor: profesor,
                           cuatrimestre: cuatrimestre,
                           horario: horario);
                       if (widget.profile == null) {
-                        DB.insert('db_school', profile).then((isSuccess) {
-                          setState(() => _isLoading = false);
+                        DB.insert(Materia.table, profile).then((isSuccess) {
+                          //setState(() => _isLoading = false);
                           if (isSuccess > 0) {
                             Navigator.pop(_scaffoldState.currentState.context);
                           } else {
@@ -116,8 +123,8 @@ class _FormAddScreenState extends State<FormAddScreen> {
                         });
                       } else {
                         profile.id = widget.profile.id;
-                        DB.update('db_school', profile).then((isSuccess) {
-                          setState(() => _isLoading = false);
+                        DB.update(Materia.table, profile).then((isSuccess) {
+                          //setState(() => _isLoading = false);
                           if (isSuccess > 0) {
                             Navigator.pop(_scaffoldState.currentState.context);
                           } else {
